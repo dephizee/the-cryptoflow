@@ -1,0 +1,357 @@
+
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CrytoFlow</title>
+  </head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <link rel="stylesheet" type="text/css" href="./css/icon.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/m_main.css">
+  <i class="icono-spinner spinner"></i>
+  <script src="https://unpkg.com/@aeternity/aepp-sdk/dist/aepp-sdk.browser-script.js"></script>
+  <script type="text/javascript">
+    const contractSource = `
+    contract Task_flow =
+    record task = 
+      {
+       name           : string,
+       comment        : string,
+       date           : string,
+       duration       : int}
+    record state = 
+      {
+        all_tasks: map(address, map(int, task))
+       }
+    entrypoint init() =
+      { all_tasks = {}
+         }
+    stateful entrypoint init_user() = 
+      
+      if( !Map.member(Call.caller, state.all_tasks) )
+        put(state{all_tasks[Call.caller] = {} })
+    stateful entrypoint add_task(name': string, comment': string, date': string, duration': int) = 
+      let task = {  name = name', comment = comment', date = date', duration = duration'}
+      let index = Map.size( state.all_tasks[Call.caller] )
+      put(state{all_tasks[Call.caller][index] = task })
+    stateful entrypoint getLength() : int =
+      Map.size(state.all_tasks)
+    stateful entrypoint getTask(addr : address) : map(int, task) =
+      if( Map.member(addr, state.all_tasks ) )
+        state.all_tasks[addr]
+      else
+        {}
+    stateful entrypoint getAllTask() : map(address, map(int, task) ) =
+      state.all_tasks
+    
+    `;
+    const contractAddress = 'ct_FCM8X4G6DfrZAfYGr5EXqikk2tdSSJsvG9T257UsZvkqu3diK';
+  </script>
+  <body>
+  	<div class="col-8 col-offset-4 panel">
+		<h2 style="text-align: center;">
+			Task
+		</h2>
+		<input type="text" name="task" placeholder="Task">
+		<input type="text" name="comment" placeholder="Comment">
+		<input type="date" name="start_date" placeholder="Start Date">
+		<input type="number" name="duration" placeholder="Duration">
+		<input type="submit" id="add_task" value="Add Task">
+		<input type="submit" id="remove_panel" value="Cancel">
+	</div>
+     <div class="row">
+       <div class="col-12 main_div">
+         <div class="col-12 header">
+          <div class="col-12 header_top">
+            <div class="col-6 logo">
+                crypto flow
+              </div>    
+              <div class="col-6 menu_list">
+                <i class="icono-list menu_list_icon"  ></i>
+                <h5 class="blockstack_name" style="display: none"></h5>
+                
+                <ul class="col-12 menu_ul">
+
+                <!-- <a class="spinner" href="#"><li><i class="icono-spinner" style=" margin: 20px; color: #ff0028;;"></i></li></a> -->
+                <a class="login" href="#"><li>Log in</li></a>
+                <a class="logout" href="#"><li>Logout</li></a>
+                </ul>
+              </div>
+              
+          </div>
+          <div class="col-12">
+            <div class=" col-offset-4 col-8 header_main">
+              <h1 class="welcome_text">
+                  Welcome to Cryptoflow
+              </h1>
+              <div class=" col-offset-6 col-2">
+                  facebook 
+                  <i class="icono-facebook" style="color: blue" ></i>
+              </div>
+              <div class=" col-offset- col-2">
+                  twiiter
+                  <i class="icono-twitter" style="color: cyan" ></i>
+              </div>
+              <div class=" col-offset- col-2">
+                  Youtube
+                  <i class="icono-youtube" style="color: red;" ></i>
+              </div>
+              <div class=" col-offset-8 col-4 g_started">
+                Get Started
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 mid_div" >
+          <div class=" col-offset-4 col-8 sub_header_main">
+            <h2 class="">
+                What CryptoFlow offers
+            </h2 >
+          </div>
+          <div class=" col-offset-4 col-8">
+            CrytoFlow is a platform that let users keep and a secure workflow of their daily activity and manage them efficently
+            
+          </div>
+        </div>
+         
+         <div class="col-12 mid_div_2 display_panel" style="display: none;">
+            <div class="col-offset- col-3 item" >
+              <div class="col-offset-6 col-6 icon_container">
+                <i class="icono-plus" style=" margin: 20px; color: #ff0028;;"></i>
+              </div>
+              <div class="col-offset-6 col-6 show_panel" style="color: #fff;" >
+                Add Task
+              </div>
+            </div>
+        </div>
+
+         <div class="col-12 footer">
+            hafiz227@gmail.com
+         </div>
+       </div>
+     </div>
+  </body>
+</html>
+<script type="text/javascript">
+	var tmp_div = `<div class="col-offset- col-3 item task" >
+              <div class="col-12 icon_container t_name">
+                task name (start_date)
+              </div>
+              <div class="col-12 t_comment" >
+                Comment
+              </div>
+              <div class="col-offset-6 col-6 g_started t_delete" style="color: #fff;" >
+                Delete Task
+              </div>
+            </div>`;
+			
+	var panel = document.querySelector("div.panel");
+	var display_panel = document.querySelector("div.display_panel");
+	var show_panel = document.querySelector("div.show_panel");
+	var spinner = document.querySelector(".spinner");
+	var remove_panel = document.querySelector("#remove_panel");
+	var perform_bid = document.querySelector("#add_task");
+	var mFormData = new FormData();
+
+	add_task.onclick = (e)=>{
+				if(validate()){
+					panel.style.marginTop = "-500px";
+					
+					addNewTask(mFormData);
+
+					renderTasks();
+
+				}
+			
+		}
+	show_panel.addEventListener('click', function() {
+			panel.style.marginTop = "30px";
+			})
+	remove_panel.addEventListener('click', function() {
+			panel.style.marginTop = "-500px";
+			})
+	var validate = ()=>{
+		mFormData = new FormData();
+		var v_node = document.querySelectorAll(".panel input[name]");
+		for (var i = 0; i < v_node.length; i++) {
+			if(v_node[i].value.length < 1){
+				v_node[i].focus();
+				alert("Empty field");
+				return false;
+				break;
+			}
+			mFormData.append(v_node[i].name, v_node[i].value);
+		}
+		mFormData.append("username", userData.username);
+		return true;
+
+	}
+	var renderTasks  = (data) =>{
+		var t_div = new DOMParser().parseFromString(tmp_div, 'text/html');
+		t_div = t_div.querySelector(".item");
+		t_div.querySelector(".t_name").innerHTML = data['name'] +" ("+ data['start_date'] +")<br>"+data['duration']+" day(s) ";
+		t_div.querySelector(".t_comment").innerHTML = data['comment'];
+		t_div.querySelector(".t_delete").id = data['t_id'];
+		t_div.querySelector(".t_delete").onclick = (e)=>{
+				deleteTask(e.target.id);
+		}
+
+		display_panel.appendChild(t_div);
+		
+	}
+	function addNewTask(dform){
+
+      var ajax;
+      try{
+        ajax = new XMLHttpRequest();
+         //console.log("working");
+      }catch(e){
+        console.log("Only Standardized used");
+      }
+      ajax.onreadystatechange = function(){
+        if(ajax.readyState == 4){
+            var result = JSON.parse(ajax.responseText);
+            
+            console.log(ajax.responseText);
+            if(result.status ==200){
+            	getTasks();
+            }else{
+            	alert("error occurred while adding task");
+            }
+            
+        }
+        spinner.style.marginTop = "-300px";
+      }
+      ajax.upload.addEventListener('progress', function(e){
+        // bar.style.display = 'block';
+        // bar.style.width = ((e.loaded/e.total * 100).toFixed(1)+'%');
+        // bar.innerHTML = ((e.loaded/e.total * 100).toFixed(1)+'%');
+        
+      } ,false);
+      ajax.open("POST", "./backend/addtask.php", true);
+      ajax.send(dform);
+      spinner.style.marginTop = "35%";
+
+    }
+    function getTasks(){
+      var ajax;
+      try{
+        ajax = new XMLHttpRequest();
+      }catch(e){
+        console.log("Only Standardized used");
+      }
+      ajax.onreadystatechange = function(){
+        if(ajax.readyState == 4){
+        	console.log(ajax.responseText);
+            var result = JSON.parse(ajax.responseText);
+            
+            populateTask(result.data);
+            
+        }
+      }
+      ajax.upload.addEventListener('progress', function(e){
+        
+      } ,false);
+      ajax.open("GET", "./backend/getusertasks.php?username="+userData.username, true);
+      ajax.send();
+
+    }
+    function deleteTask(t_id){
+      var ajax;
+      try{
+        ajax = new XMLHttpRequest();
+      }catch(e){
+        console.log("Only Standardized used");
+      }
+      ajax.onreadystatechange = function(){
+        if(ajax.readyState == 4){
+        	console.log(t_id);
+        	console.log(ajax.responseText);
+            var result = JSON.parse(ajax.responseText);
+            
+            if(result.status ==200){
+            	getTasks();
+            }else{
+            	alert("error occurred while deleting task");
+            }
+            
+        }
+        spinner.style.marginTop = "-300px";
+      }
+      ajax.upload.addEventListener('progress', function(e){
+        
+      } ,false);
+      ajax.open("GET", "./backend/deletetask.php?t_id="+t_id, true);
+      ajax.send();
+      spinner.style.marginTop = "35%";
+
+    }
+    var populateTask = (data)=>{
+    	unpopulateTask();
+		for (var i = 0; i < data.length; i++) {
+			renderTasks(data[i]);
+		}
+	}
+	var unpopulateTask = ()=>{
+		var data = document.querySelectorAll(".task");
+		for (var i = 0; i < data.length; i++) {
+			display_panel.removeChild(data[i]);
+		}
+    	
+	}
+	
+// 
+// 
+// 
+// 
+// 
+  var client = null;
+	var userSession = new blockstack.UserSession()
+	var userData = null;
+	var blockstack_name = document.querySelector(".blockstack_name");
+	var login = document.querySelector('.login');
+	var logout = document.querySelector('.logout');
+	userSession.appConfig.appDomain = "http://localhost/dacade";
+	
+	var init = async ()=>{
+		client = await Ae.Aepp();
+
+    const contract = await client.getContractInstance(contractSource, {contractAddress});
+    const calledGet = await contract.call('getAllTask', [], {callStatic: true}).catch(e => console.error(e));
+    console.log('calledGet', calledGet);
+
+    const decodedGet = await calledGet.decode().catch(e => console.error(e));
+    console.log('decodedGet', decodedGet);
+
+	
+		renderLogs();
+	}
+	var renderLogs = ()=>{
+		if (!userSession.isUserSignedIn()) {
+			login.style.display = "block";
+			logout.style.display = "none"
+			display_panel.style.display = "none";
+			blockstack_name.style.display = "none";
+	    // throw new Error("This app requires a username");	    
+	  	}else{
+	  		login.style.display = "none";
+	  		logout.style.display = "block"
+	  		display_panel.style.display = "block";
+	  		blockstack_name.style.display = "block";
+	  		
+	  		blockstack_name.innerHTML = userData.username.split(".")[0];
+	  		getTasks();
+	  	}
+    spinner.style.marginTop = "-300px";
+	}
+	init();
+
+	login.addEventListener('click', function() {
+			userSession.redirectToSignIn()
+			})
+	logout.addEventListener('click', function() {
+			userSession.signUserOut(window.location.href)
+			})
+								
+</script>

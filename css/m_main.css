@@ -1,0 +1,276 @@
+	*{
+        box-sizing: border-box;
+      }
+      .row::after{
+        content: "";
+        clear: both;
+        display: block;
+      }
+      [class*=col-]{
+        float: left;
+        padding: 10px;
+        /*border: 1px solid #ff0028;*/
+      }
+      [class*=icono-]{
+        color: white;
+      }
+      .header{
+        text-align: center;
+        color: white;
+        padding: 0;
+        background-image: url("./../images/2.jpg");
+      	background-repeat: no-repeat;
+      	background-size: cover;
+      }
+      .ctg{
+        color:black;
+        transition: 1s;
+      }
+      .ctg:hover{
+        box-shadow: 0 0 5px black;
+        color: white
+      }
+      .main_div{
+      	border-width:0;
+      	padding: 0;
+      }
+      .header_top, .footer{
+      	background-color: #281e1e;
+      	text-align: left;
+      }
+      .footer{
+      	text-align: right;
+      	color: #fff;	
+      	font-family: monospace;
+      	letter-spacing: 2px;
+      }
+      .menu_list, .header_top, .out_icon_container, .task{
+      	padding: 0;
+      	margin: 0;
+      }
+      .task{
+        height: 220px;
+      }
+      .t_name {
+        font-family: serif;
+        font-weight: 400; 
+      }
+      .menu_list{
+      	text-align: right;
+      	padding-right: 20px;
+      }
+      .logo{
+      	font-family: monospace;
+      	letter-spacing: 2px;
+      	font-weight: 600;
+      	padding-right: 20px;
+      	font-size: x-large;
+      }
+      .welcome_text{
+      	font-size: 2.4em;
+      	margin: 10px;
+      	margin-bottom: 30px;
+      	text-align: center;
+      	font-family: serif;
+      	font-weight: 100;
+      }
+      .g_started{
+      	background: #ff0028;
+      	margin: 10px;
+      	margin-top: 40px;
+      	border-radius: 5px;
+      	cursor: pointer;
+      }
+      .g_started:hover{
+
+      }
+      .header_main, .sub_header_main{
+      	text-align: center;
+      	font-family: monospace;
+      	padding: 0;
+      	margin: 50px;
+      }
+      .sub_header_main{
+      	font-family: verdana, sans-serif;
+      	margin-bottom: 0px;
+      }
+      .mid_div{
+      	background: #f1f0f0;
+      }
+      .mid_div_2{
+      	text-align: center;
+      	font-family: monospace;
+
+      }
+      .icon_container{
+      	padding: 0;
+      	margin: 0;      	
+      }
+      .spinner{
+         margin-left: 50%; margin-top: 35%; color: #ff0028; text-align: center; transition: 5s;
+         position: absolute;
+      }
+      .show_panel{
+        background: green;
+        border-radius: 5px;
+        border-width: 0;
+        cursor: pointer;
+      }
+      html{
+      	scroll-behavior: smooth;
+      }
+      body{
+      		margin: 0;
+      		/*background: blue;*/
+
+          
+          /*background-image: url("images/2.jpeg");
+          background-repeat: no-repeat;
+          background-size: cover;*/
+      }
+      input, select{
+        width: 80%;
+        margin-left: 10%;
+        margin-bottom: 5px;
+        height: 40px;
+        text-align: center;
+        border: 1px solid #ff0028;
+        transition: 2s;
+      }
+      input[type=submit]{
+      	cursor: pointer;
+      }
+      input:focus{
+        /*background-color: #ff0028;
+        color: white;*/
+      }
+      select{
+        background-color: #ff0028;
+        color: white;
+      }
+      .submit{
+        background-color: #ff0028;
+        color: white;
+      }
+      a{
+        text-decoration: none;
+        color: #fff;
+      }
+      li{
+        text-decoration: none;
+        display: inline;
+        padding: 5px;
+
+      }
+      ul{
+        
+      }
+      li:hover{
+        color: #f5dfdf;
+        box-shadow: 0 0 10px red;
+      }
+       .panel{
+        box-shadow:0 0 5px #146941;
+        position: fixed;
+        background-color: #fef4f3;
+        padding: 20px;
+        margin-top: -500px;
+        transition: 2s;
+      }
+      .item{
+      color: black;
+      border: 1px solid #ff0028;
+      padding: 20px;
+      margin: 0;
+      margin-bottom: 10px;
+      width: 100%;
+      transition: 1s;
+    }
+      .menu_list_icon{
+      	display: none;
+      }
+
+      .col-1 {width: 8.33%;}
+    .col-2 {width: 16.66%;}
+    .col-3 {width: 25%;}
+    .col-4 {width: 33.33%;}
+    .col-5 {width: 41.66%;}
+    .col-6 {width: 50%;}
+    .col-7 {width: 58.33%;}
+    .col-8 {width: 66.66%;}
+    .col-9 {width: 75%;}
+    .col-10 {width: 83.33%;}
+    .col-11 {width: 91.66%;}
+    .col-12 {width: 100%;}
+
+    .col-offset-1 {margin-left: 4.16%;}
+    .col-offset-2 {margin-left: 8.33%;}
+    .col-offset-3 {margin-left: 12.5%;}
+    .col-offset-4 {margin-left: 16.66%;}
+    .col-offset-5 {margin-left: 20.83%;}
+    .col-offset-6 {margin-left: 25%;}
+    .col-offset-7 {margin-left: 29.16%;}
+    .col-offset-8 {margin-left: 33.33%;}
+    .col-offset-9 {margin-left: 37.5%;}
+    .col-offset-10 {margin-left: 41.66%;}
+    .col-offset-11 {margin-left: 45.5%;}
+    .col-offset-12 {margin-left: 50%;}
+
+    @media only screen and (max-width: 768px){
+      [class*=col-]{
+        width: 80%;
+        margin-left: 10%;
+        }
+        .main_div, .header, .footer, .mid_div, .header_top{
+      	border-width:0;
+      	padding: 0;
+      	margin: 0;
+      	width: 100%;
+      }
+      .header_top{
+      	height: 50px;
+      }
+      .menu_list_icon{
+      	display: block;
+      	float: right;
+      	
+      	color: #ff0028;
+      }
+      .menu_list_icon:hover{
+      	cursor: pointer;
+       }
+      .menu_ul{
+      	display: none;
+		position: absolute;
+		top: 50px;
+		text-align: center;
+		float: right;
+		z-index: 2;
+		margin: 0;
+		padding: 0;
+		width: 50%;
+		background: #ff0028;
+      }
+      .menu_list_icon:hover + .menu_ul{
+		display: block;
+		}
+		.menu_list:hover > .menu_ul{
+		display: block;
+		}
+		.menu_list:hover > .menu_list_icon{
+		color: #fff;
+		}
+      .menu_ul li{
+      	display: block;
+      	width: 100%;
+      	margin: 10px;
+      }
+      .logo, .menu_list{
+      	width: 50%;
+      	margin: 0;
+      }
+      .spinner li i{
+        color: #fff;
+        background: #fff;
+      }
+    }
