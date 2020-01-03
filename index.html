@@ -332,7 +332,15 @@
 
     console.log('decodedGet', tasks);
     console.log(tasks);
-		populateTask(tasks[0][1]);
+		
+    if (tasks==null) {
+      display_panel.style.display = "none";
+      alert("Unable to load");
+    }else{
+        display_panel.style.display = "block";
+        populateTask(tasks[0][1]);
+    }
+    spinner.style.marginTop = "-300px";
 	}
 	var renderLogs = ()=>{
 		if (tasks==null) {
