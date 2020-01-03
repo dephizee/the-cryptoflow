@@ -49,9 +49,11 @@
             {}
         stateful entrypoint getAllTask() : map(address, map(int, task) ) =
           state.all_tasks
+        stateful entrypoint deleteTask(index : int) =
+          put(state{ all_tasks[Call.caller] @ b = Map.delete(index, b) })
         
         `;
-    const contractAddress = 'ct_Np9zy883zQvWC5fP5JyJ3swDzr8B7WwrdPg5ZBSfBBcfsh9qM';
+    const contractAddress = 'ct_byjHPrEPddTtCvXE5p2b4UVvonSgspgARv63zo3Fu3WGMGutP';
   </script>
   <body>
   	<div class="col-8 col-offset-4 panel">
@@ -168,6 +170,7 @@
           if (tasks==null) {
             alert("Unable to load");
           }else{
+
               populateTask(tasks[0][1]);
           }
 				}
@@ -210,40 +213,20 @@
 		t_div.querySelector(".t_delete").id = data_id;
 		t_div.querySelector(".t_delete").onclick = (e)=>{
 				deleteTask(e.target.id);
+        spinner.style.marginTop = "35%";
+        var callset = await callNonStaticFunc('deleteTask', [e.target.id], 0);
+        var tasks = await callFunc('getAllTask', []);
+        if (tasks==null) {
+          alert("Unable to load");
+        }else{
+
+            populateTask(tasks[0][1]);
+        }
+        spinner.style.marginTop = "-300px";
 		}
 		display_panel.appendChild(t_div);
 		
 }
-    function deleteTask(t_id){
-      var ajax;
-      try{
-        ajax = new XMLHttpRequest();
-      }catch(e){
-        console.log("Only Standardized used");
-      }
-      ajax.onreadystatechange = function(){
-        if(ajax.readyState == 4){
-        	console.log(t_id);
-        	console.log(ajax.responseText);
-            var result = JSON.parse(ajax.responseText);
-            
-            if(result.status ==200){
-            	getTasks();
-            }else{
-            	alert("error occurred while deleting task");
-            }
-            
-        }
-        spinner.style.marginTop = "-300px";
-      }
-      ajax.upload.addEventListener('progress', function(e){
-        
-      } ,false);
-      ajax.open("GET", "./backend/deletetask.php?t_id="+t_id, true);
-      ajax.send();
-      spinner.style.marginTop = "35%";
-
-    }
     var populateTask = (data)=>{
     	unpopulateTask();
       console.log('populateTask', data);
@@ -280,7 +263,6 @@
     const contract = await client.getContractInstance(contractSource, {contractAddress});
     const calledSet = await contract.call(func, args, {amount: value}).catch(e => {
       console.error(e);
-      alert("Unable to upload, try again later");
     });
 
     return calledSet;
@@ -291,6 +273,7 @@
     var init_user = await callFunc('init_user', []);
     var tasks = await callFunc('getAllTask', []);
 
+    console.log('init_user', init_user);
     console.log('decodedGet', tasks);
     console.log(tasks);
 		

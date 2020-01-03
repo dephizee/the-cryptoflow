@@ -108,7 +108,7 @@
       }
       .spinner{
          margin-left: 50%; margin-top: 35%; color: #ff0028; text-align: center; transition: 5s;
-         position: absolute;
+         position: fixed;
       }
       .show_panel{
         background: green;
