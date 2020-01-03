@@ -193,15 +193,16 @@
 
 	}
 	var renderTasks  = (data) =>{
+    var data_id = data[0];
+    data = data[1];
 		var t_div = new DOMParser().parseFromString(tmp_div, 'text/html');
 		t_div = t_div.querySelector(".item");
-		t_div.querySelector(".t_name").innerHTML = data['name'] +" ("+ data['start_date'] +")<br>"+data['duration']+" day(s) ";
-		t_div.querySelector(".t_comment").innerHTML = data['comment'];
-		t_div.querySelector(".t_delete").id = data['t_id'];
+		t_div.querySelector(".t_name").innerHTML = data.name +" ("+ data.date +")<br>"+data.duration+" day(s) ";
+		t_div.querySelector(".t_comment").innerHTML = data.comment;
+		t_div.querySelector(".t_delete").id = data_id;
 		t_div.querySelector(".t_delete").onclick = (e)=>{
 				deleteTask(e.target.id);
 		}
-
 		display_panel.appendChild(t_div);
 		
 	}
@@ -327,34 +328,19 @@
     console.log('init()');
 		client = await Ae.Aepp();
     tasks = await callFunc('getAllTask', []);
-    // const contract = await client.getContractInstance(contractSource, {contractAddress});
-    // const calledGet = await contract.call('getAllTask', [], {callStatic: true}).catch(e => console.error(e));
-    // console.log('calledGet', calledGet);
-
-    // const decodedGet = await calledGet.decode().catch(e => console.error(e));
 
     console.log('decodedGet', tasks);
     console.log(tasks);
-
-	
-		renderLogs();
+		populateTask(tasks[1]);
 	}
 	var renderLogs = ()=>{
-		if (!userSession.isUserSignedIn()) {
-			login.style.display = "block";
-			logout.style.display = "none"
+		if (tasks==null) {
 			display_panel.style.display = "none";
-			blockstack_name.style.display = "none";
-	    // throw new Error("This app requires a username");	    
-	  	}else{
-	  		login.style.display = "none";
-	  		logout.style.display = "block"
+      alert("Unable to load");
+	  }else{
 	  		display_panel.style.display = "block";
-	  		blockstack_name.style.display = "block";
-	  		
-	  		blockstack_name.innerHTML = userData.username.split(".")[0];
 	  		getTasks();
-	  	}
+	  }
     spinner.style.marginTop = "-300px";
 	}
 	init();
