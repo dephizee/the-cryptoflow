@@ -211,7 +211,7 @@
 		t_div.querySelector(".t_name").innerHTML = data.name +" ("+ data.date +")<br>"+data.duration+" day(s) ";
 		t_div.querySelector(".t_comment").innerHTML = data.comment;
 		t_div.querySelector(".t_delete").id = data_id;
-		t_div.querySelector(".t_delete").onclick = (e)=>{
+		t_div.querySelector(".t_delete").onclick = async (e)=>{
 				deleteTask(e.target.id);
         spinner.style.marginTop = "35%";
         var callset = await callNonStaticFunc('deleteTask', [e.target.id], 0);
