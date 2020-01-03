@@ -307,12 +307,10 @@
 // 
 // 
   var client = null;
-	var userSession = new blockstack.UserSession()
-	var userData = null;
+
 	var blockstack_name = document.querySelector(".blockstack_name");
 	var login = document.querySelector('.login');
 	var logout = document.querySelector('.logout');
-	userSession.appConfig.appDomain = "http://localhost/dacade";
 	
 	var init = async ()=>{
 		client = await Ae.Aepp();
