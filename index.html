@@ -312,6 +312,7 @@
 // 
 // 
   var client = null;
+  var tasks = null;
 
 	var blockstack_name = document.querySelector(".blockstack_name");
 	var login = document.querySelector('.login');
@@ -324,12 +325,13 @@
   }
 	var init = async ()=>{
 		client = await Ae.Aepp();
-    var tasks = await callFunc('getAllTask', []);
+    tasks = await callFunc('getAllTask', []);
     // const contract = await client.getContractInstance(contractSource, {contractAddress});
     // const calledGet = await contract.call('getAllTask', [], {callStatic: true}).catch(e => console.error(e));
     // console.log('calledGet', calledGet);
 
     // const decodedGet = await calledGet.decode().catch(e => console.error(e));
+
     console.log('decodedGet', tasks);
     console.log(tasks);
 
