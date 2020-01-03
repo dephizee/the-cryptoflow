@@ -316,7 +316,7 @@
 	var blockstack_name = document.querySelector(".blockstack_name");
 	var login = document.querySelector('.login');
 	var logout = document.querySelector('.logout');
-	function callFunc(func, args){
+	async function callFunc(func, args){
     const contract = await client.getContractInstance(contractSource, {contractAddress});
     const calledGet = await contract.call(func, args, {callStatic: true}).catch(e => console.error(e));
     const decodedGet = await calledGet.decode().catch(e => console.error(e));
