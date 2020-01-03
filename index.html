@@ -288,6 +288,7 @@
 	var init = async ()=>{
     console.log('init()');
 		client = await Ae.Aepp();
+    var init_user = await callFunc('init_user', []);
     var tasks = await callFunc('getAllTask', []);
 
     console.log('decodedGet', tasks);
