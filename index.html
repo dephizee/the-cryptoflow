@@ -156,17 +156,19 @@
 	var show_panel = document.querySelector("div.show_panel");
 	var spinner = document.querySelector(".spinner");
 	var remove_panel = document.querySelector("#remove_panel");
-	var perform_bid = document.querySelector("#add_task");
-	var mFormData = new FormData();
+	var add_task = document.querySelector("#add_task");
 
-	add_task.onclick = (e)=>{
+	add_task.onclick = async (e)=>{
 				if(validate()){
 					panel.style.marginTop = "-500px";
 					
-					addNewTask(mFormData);
-
-					renderTasks();
-
+          var callset = await callNonStaticFunc('add_task', getNewTaskData(), 0);
+          var tasks = await callFunc('getAllTask', []);
+          if (tasks==null) {
+            alert("Unable to load");
+          }else{
+              populateTask(tasks[0][1]);
+          }
 				}
 			
 		}
@@ -177,7 +179,6 @@
 			panel.style.marginTop = "-500px";
 			})
 	var validate = ()=>{
-		mFormData = new FormData();
 		var v_node = document.querySelectorAll(".panel input[name]");
 		for (var i = 0; i < v_node.length; i++) {
 			if(v_node[i].value.length < 1){
@@ -186,13 +187,18 @@
 				return false;
 				break;
 			}
-			mFormData.append(v_node[i].name, v_node[i].value);
-		}
-		mFormData.append("username", userData.username);
+		}		
 		return true;
-
 	}
-	var renderTasks  = (data) =>{
+  function getNewTaskData(){
+    var arr = [];
+    var v_node = document.querySelectorAll(".panel input[name]");
+    for (var i = 0; i < v_node.length; i++) {
+      arr[i] = v_node[i].value;
+    }   
+    return arr;
+  }
+	var renderTask  = (data) =>{
     var data_id = data[0];
     data = data[1];
 		var t_div = new DOMParser().parseFromString(tmp_div, 'text/html');
@@ -205,7 +211,7 @@
 		}
 		display_panel.appendChild(t_div);
 		
-	}
+}
 	function addNewTask(dform){
 
       var ajax;
@@ -297,7 +303,7 @@
     	unpopulateTask();
       console.log('populateTask', data);
   		for (var i = 0; i < data.length; i++) {
-  			renderTasks(data[i]);
+  			renderTask(data[i]);
   		}
 	}
 	var unpopulateTask = ()=>{
@@ -314,7 +320,7 @@
 // 
 // 
   var client = null;
-  var tasks = null;
+  
 
 	var blockstack_name = document.querySelector(".blockstack_name");
 	var login = document.querySelector('.login');
@@ -325,10 +331,16 @@
     const decodedGet = await calledGet.decode().catch(e => console.error(e));
     return decodedGet;
   }
+  async function callNonStaticFunc(func, args, value){
+    const contract = await client.getContractInstance(contractSource, {contractAddress});
+    const calledSet = await contract.call(func, args, {amount: value}).catch(e => console.error(e));
+
+    return calledSet;
+  }
 	var init = async ()=>{
     console.log('init()');
 		client = await Ae.Aepp();
-    tasks = await callFunc('getAllTask', []);
+    var tasks = await callFunc('getAllTask', []);
 
     console.log('decodedGet', tasks);
     console.log(tasks);
@@ -340,16 +352,6 @@
         display_panel.style.display = "block";
         populateTask(tasks[0][1]);
     }
-    spinner.style.marginTop = "-300px";
-	}
-	var renderLogs = ()=>{
-		if (tasks==null) {
-			display_panel.style.display = "none";
-      alert("Unable to load");
-	  }else{
-	  		display_panel.style.display = "block";
-	  		getTasks();
-	  }
     spinner.style.marginTop = "-300px";
 	}
 	init();
