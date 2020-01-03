@@ -295,9 +295,10 @@
     }
     var populateTask = (data)=>{
     	unpopulateTask();
-		for (var i = 0; i < data.length; i++) {
-			renderTasks(data[i]);
-		}
+      console.log('populateTask', data);
+  		for (var i = 0; i < data.length; i++) {
+  			renderTasks(data[i]);
+  		}
 	}
 	var unpopulateTask = ()=>{
 		var data = document.querySelectorAll(".task");
