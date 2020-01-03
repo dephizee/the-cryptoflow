@@ -28,7 +28,7 @@
           { all_tasks = {}
              }
         stateful entrypoint init_user() = 
-          
+
           if( !Map.member(Call.caller, state.all_tasks) )
             put(state{all_tasks[Call.caller] = {} })
         stateful entrypoint add_task(name': string, comment': string, date': string, duration': int) = 
@@ -42,11 +42,16 @@
             state.all_tasks[addr]
           else
             {}
+        stateful entrypoint getAllTasksForAddress() : map(int, task)  =
+          if( Map.member(Call.caller, state.all_tasks ) )
+            state.all_tasks[Call.caller]
+          else
+            {}
         stateful entrypoint getAllTask() : map(address, map(int, task) ) =
           state.all_tasks
         
         `;
-    const contractAddress = 'ct_FCM8X4G6DfrZAfYGr5EXqikk2tdSSJsvG9T257UsZvkqu3diK';
+    const contractAddress = 'ct_Np9zy883zQvWC5fP5JyJ3swDzr8B7WwrdPg5ZBSfBBcfsh9qM';
   </script>
   <body>
   	<div class="col-8 col-offset-4 panel">
@@ -311,16 +316,21 @@
 	var blockstack_name = document.querySelector(".blockstack_name");
 	var login = document.querySelector('.login');
 	var logout = document.querySelector('.logout');
-	
-	var init = async ()=>{
-		client = await Ae.Aepp();
-
+	function callFunc(){
     const contract = await client.getContractInstance(contractSource, {contractAddress});
     const calledGet = await contract.call('getAllTask', [], {callStatic: true}).catch(e => console.error(e));
-    console.log('calledGet', calledGet);
-
     const decodedGet = await calledGet.decode().catch(e => console.error(e));
-    console.log('decodedGet', decodedGet);
+    return decodedGet;
+  }
+	var init = async ()=>{
+		client = await Ae.Aepp();
+    var tasks = callFunc('getAllTask', []);
+    // const contract = await client.getContractInstance(contractSource, {contractAddress});
+    // const calledGet = await contract.call('getAllTask', [], {callStatic: true}).catch(e => console.error(e));
+    // console.log('calledGet', calledGet);
+
+    // const decodedGet = await calledGet.decode().catch(e => console.error(e));
+    console.log('decodedGet', tasks);
 
 	
 		renderLogs();
