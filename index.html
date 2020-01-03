@@ -324,6 +324,7 @@
     return decodedGet;
   }
 	var init = async ()=>{
+    console.log('init()');
 		client = await Ae.Aepp();
     tasks = await callFunc('getAllTask', []);
     // const contract = await client.getContractInstance(contractSource, {contractAddress});
