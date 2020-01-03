@@ -324,7 +324,7 @@
   }
 	var init = async ()=>{
 		client = await Ae.Aepp();
-    var tasks = callFunc('getAllTask', []);
+    var tasks = await callFunc('getAllTask', []);
     // const contract = await client.getContractInstance(contractSource, {contractAddress});
     // const calledGet = await contract.call('getAllTask', [], {callStatic: true}).catch(e => console.error(e));
     // console.log('calledGet', calledGet);
