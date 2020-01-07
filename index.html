@@ -177,11 +177,11 @@
 
 	add_task.onclick = async (e)=>{
 				if(validate()){
-          spinner.style.marginTop = "35%";
+          spinner.style.marginTop = "50%";
 					panel.style.marginTop = "-500px";
 					
           var callset = await callNonStaticFunc('add_task', getNewTaskData(), 0);
-          var tasks = await callFunc('getAllTask', []);
+          var tasks = await callFunc('getAllTasksForAddress', []);
           if (tasks==null) {
             alert("Unable to load");
           }else{
@@ -228,9 +228,9 @@
 		t_div.querySelector(".t_delete").id = data_id;
 		t_div.querySelector(".t_delete").onclick = async (e)=>{
 				                          
-        spinner.style.marginTop = "35%";
+        spinner.style.marginTop = "50%";
         var callset = await callNonStaticFunc('deleteTask', [e.target.id], 0);
-        var tasks = await callFunc('getAllTask', []);
+        var tasks = await callFunc('getAllTasksForAddress', []);
         if (tasks==null) {
           alert("Unable to load");
         }else{
