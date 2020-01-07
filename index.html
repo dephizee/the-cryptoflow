@@ -290,7 +290,7 @@
 		client = await Ae.Aepp();
     var user_address = await client.address();
     console.log("Client Address", user_address);
-    var init_user = await callFunc('init_user', []);
+    var init_user = await callNonStaticFunc('init_user', []);
     var tasks = await callFunc('getAllTasksForAddress', []);
 
     console.log('init_user', init_user);
