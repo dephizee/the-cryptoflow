@@ -104,21 +104,9 @@
           </div>
           <div class="col-12">
             <div class=" col-offset-4 col-8 header_main">
-              <h1 class="welcome_text">
+              <h4 class="welcome_text">
                   Welcome to Cryptoflow
-              </h1>
-              <div class=" col-offset-6 col-2">
-                  facebook 
-                  <i class="icono-facebook" style="color: blue" ></i>
-              </div>
-              <div class=" col-offset- col-2">
-                  twiiter
-                  <i class="icono-twitter" style="color: cyan" ></i>
-              </div>
-              <div class=" col-offset- col-2">
-                  Youtube
-                  <i class="icono-youtube" style="color: red;" ></i>
-              </div>
+              </h4>
               <div class=" col-offset-8 col-4 g_started">
                 Get Started
               </div>
@@ -295,7 +283,7 @@
     }else{
         display_panel.style.display = "block";
         if(tasks.length > 0){
-          populateTask(tasks[0]);
+          populateTask(tasks);
         }else{
           alert("No Task Found");
         }

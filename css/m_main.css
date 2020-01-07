@@ -67,7 +67,7 @@
       	font-size: x-large;
       }
       .welcome_text{
-      	font-size: 2.4em;
+      	font-size: 1.4em;
       	margin: 10px;
       	margin-bottom: 30px;
       	text-align: center;
@@ -107,7 +107,7 @@
       	margin: 0;      	
       }
       .spinner{
-         margin-left: 50%; margin-top: 35%; color: #ff0028; text-align: center; transition: 5s;
+         margin-left: 50%; margin-top: 50%; color: #ff0028; text-align: center; transition: 5s;
          position: fixed;
       }
       .show_panel{
