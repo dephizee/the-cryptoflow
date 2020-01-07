@@ -25,53 +25,51 @@
            comment        : string,
            date           : string,
            duration       : int}
+           
         record state = 
           {
-            all_tasks: map(address, task_info),
-            calls : int
+            all_tasks: map(address, task_info)
            }
+           
         entrypoint init() =
           { 
-            all_tasks = {},
-            calls = 0
+            all_tasks = {}
              }
-        stateful entrypoint init_user() : int = 
-          put(state{calls  = (state.calls + 1) })
+        
+        stateful entrypoint init_user() = 
           if( !Map.member(Call.caller, state.all_tasks) )
             let task_i = { data = {} , length = 0 }
             put(state{all_tasks[Call.caller] = task_i })
             
-            0
-          else
-            1
-        stateful entrypoint add_task(name': string, comment': string, date': string, duration': int) : int = 
+        stateful entrypoint add_task(name': string, comment': string, date': string, duration': int)= 
           let task = {  name = name', comment = comment', date = date', duration = duration'}
           let index = state.all_tasks[Call.caller].length
           let new_i = index + 1
           put(state{all_tasks[Call.caller].data[index] = task})
           put(state{all_tasks[Call.caller].length = new_i  })
-
-          state.all_tasks[Call.caller].length
+          
         stateful entrypoint getLength() : int =
           Map.size(state.all_tasks)
+          
         stateful entrypoint getTask(addr : address) : map(int, task) =
           if( Map.member(addr, state.all_tasks ) )
             state.all_tasks[addr].data
           else
             {}
+            
         stateful entrypoint getAllTasksForAddress() : map(int, task)  =
           if( Map.member(Call.caller, state.all_tasks ) )
             state.all_tasks[Call.caller].data
           else
             {}
+            
         stateful entrypoint getAllTask() : map(address, task_info ) =
           state.all_tasks
+          
         stateful entrypoint deleteTask(index : int) =
           put(state{ all_tasks[Call.caller].data @ b = Map.delete(index, b) })
-        stateful entrypoint getCalls() : int =
-          state.calls
         `;
-    const contractAddress = 'ct_2RXK9jxq8JvTFL2QvM4nitmanytqRdCtQFBjpBnWsc3sP8GNsG';
+    const contractAddress = 'ct_zqhchWZEYwjJhpZbYVfVbfBzXeDNVeuinuXG3QBvobe1wRyjC';
   </script>
   <body>
   	<div class="col-8 col-offset-4 panel">
@@ -99,8 +97,7 @@
                 <ul class="col-12 menu_ul">
 
                 <!-- <a class="spinner" href="#"><li><i class="icono-spinner" style=" margin: 20px; color: #ff0028;;"></i></li></a> -->
-                <a class="login" href="#"><li>Log in</li></a>
-                <a class="logout" href="#"><li>Logout</li></a>
+                
                 </ul>
               </div>
               
@@ -269,8 +266,6 @@
   
 
 	var blockstack_name = document.querySelector(".blockstack_name");
-	var login = document.querySelector('.login');
-	var logout = document.querySelector('.logout');
 	async function callFunc(func, args){
     const contract = await client.getContractInstance(contractSource, {contractAddress});
     const calledGet = await contract.call(func, args, {callStatic: true}).catch(e => console.error(e));
@@ -302,8 +297,10 @@
       alert("Unable to load");
     }else{
         display_panel.style.display = "block";
-        if(tasks[0][1] != undefined){
+        if(tasks.length > 0){
           populateTask(tasks[0][1]);
+        }else{
+          alert("No Task Found");
         }
         
     }
@@ -311,11 +308,5 @@
 	}
 	init();
 
-	login.addEventListener('click', function() {
-			userSession.redirectToSignIn()
-			})
-	logout.addEventListener('click', function() {
-			userSession.signUserOut(window.location.href)
-			})
-								
+					
 </script>
