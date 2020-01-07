@@ -9,7 +9,9 @@
   
   <link rel="stylesheet" type="text/css" href="./css/icon.min.css">
   <link rel="stylesheet" type="text/css" href="./css/m_main.css">
-  <i class="icono-spinner spinner"></i>
+  <div class="col-offset-8 col-4 spinner">
+    <img src="./images/spinner.gif">
+  </div>
   <script src="https://unpkg.com/@aeternity/aepp-sdk/dist/aepp-sdk.browser-script.js"></script>
   <script type="text/javascript">
     const contractSource = `
@@ -174,7 +176,7 @@
             alert("Unable to load");
           }else{
 
-              populateTask(tasks[0][1]);
+              populateTask(tasks);
           }
 				}
 			spinner.style.marginTop = "-500px";
@@ -223,7 +225,7 @@
           alert("Unable to load");
         }else{
 
-            populateTask(tasks[0][1]);
+            populateTask(tasks);
         }
         spinner.style.marginTop = "-300px";
 		}
