@@ -282,7 +282,7 @@
     console.log('init()');
 		client = await Ae.Aepp();
     var init_user = await callFunc('init_user', []);
-    var tasks = await callFunc('getAllTask', []);
+    var tasks = await callFunc('getAllTasksForAddress', []);
 
     console.log('init_user', init_user);
     console.log('decodedGet', tasks);
