@@ -92,7 +92,7 @@
               </div>    
               <div class="col-6 menu_list">
                 <i class="icono-list menu_list_icon"  ></i>
-                <h5 class="blockstack_name" style="display: none"></h5>
+                <h5 class="" style="display: none"></h5>
                 
                 <ul class="col-12 menu_ul">
 
@@ -240,14 +240,13 @@
         spinner.style.marginTop = "-300px";
 		}
 		display_panel.appendChild(t_div);
-		
-}
-    var populateTask = (data)=>{
-    	unpopulateTask();
-      console.log('populateTask', data);
-  		for (var i = 0; i < data.length; i++) {
-  			renderTask(data[i]);
-  		}
+  }
+  var populateTask = (data)=>{
+  	unpopulateTask();
+    console.log('populateTask', data);
+		for (var i = 0; i < data.length; i++) {
+			renderTask(data[i]);
+		}
 	}
 	var unpopulateTask = ()=>{
 		var data = document.querySelectorAll(".task");
@@ -264,8 +263,6 @@
 // 
   var client = null;
   
-
-	var blockstack_name = document.querySelector(".blockstack_name");
 	async function callFunc(func, args){
     const contract = await client.getContractInstance(contractSource, {contractAddress});
     const calledGet = await contract.call(func, args, {callStatic: true}).catch(e => console.error(e));
@@ -298,7 +295,7 @@
     }else{
         display_panel.style.display = "block";
         if(tasks.length > 0){
-          populateTask(tasks[0][1]);
+          populateTask(tasks[0]);
         }else{
           alert("No Task Found");
         }
