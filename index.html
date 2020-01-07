@@ -14,6 +14,11 @@
   <script type="text/javascript">
     const contractSource = `
       contract Task_flow =
+        record task_info = 
+          {
+            data : map(int, task),
+            length : int
+          }
         record task = 
           {
            name           : string,
@@ -22,38 +27,44 @@
            duration       : int}
         record state = 
           {
-            all_tasks: map(address, map(int, task))
+            all_tasks: map(address, task_info)
            }
         entrypoint init() =
-          { all_tasks = {}
+          { 
+            all_tasks = {}
              }
-        stateful entrypoint init_user() = 
-
+        stateful entrypoint init_user() : address = 
           if( !Map.member(Call.caller, state.all_tasks) )
-            put(state{all_tasks[Call.caller] = {} })
-        stateful entrypoint add_task(name': string, comment': string, date': string, duration': int) = 
+            let task_i = { data = {} , length = 0 }
+            put(state{all_tasks[Call.caller] = task_i })
+          Call.caller
+        stateful entrypoint add_task(name': string, comment': string, date': string, duration': int) : int = 
           let task = {  name = name', comment = comment', date = date', duration = duration'}
-          let index = Map.size( state.all_tasks[Call.caller] )
-          put(state{all_tasks[Call.caller][index] = task })
+          let index = state.all_tasks[Call.caller].length
+          let new_i = index + 1
+          put(state{all_tasks[Call.caller].data[index] = task})
+          put(state{all_tasks[Call.caller].length = new_i  })
+
+          state.all_tasks[Call.caller].length
         stateful entrypoint getLength() : int =
           Map.size(state.all_tasks)
         stateful entrypoint getTask(addr : address) : map(int, task) =
           if( Map.member(addr, state.all_tasks ) )
-            state.all_tasks[addr]
+            state.all_tasks[addr].data
           else
             {}
         stateful entrypoint getAllTasksForAddress() : map(int, task)  =
           if( Map.member(Call.caller, state.all_tasks ) )
-            state.all_tasks[Call.caller]
+            state.all_tasks[Call.caller].data
           else
             {}
-        stateful entrypoint getAllTask() : map(address, map(int, task) ) =
+        stateful entrypoint getAllTask() : map(address, task_info ) =
           state.all_tasks
         stateful entrypoint deleteTask(index : int) =
-          put(state{ all_tasks[Call.caller] @ b = Map.delete(index, b) })
+          put(state{ all_tasks[Call.caller].data @ b = Map.delete(index, b) })
         
         `;
-    const contractAddress = 'ct_byjHPrEPddTtCvXE5p2b4UVvonSgspgARv63zo3Fu3WGMGutP';
+    const contractAddress = 'ct_2CSUA7eBKxC7ri2PD8NE69k4ayiUqek8aPvKwPXkjqXNKQJx2g';
   </script>
   <body>
   	<div class="col-8 col-offset-4 panel">
