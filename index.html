@@ -27,16 +27,20 @@
            duration       : int}
         record state = 
           {
-            all_tasks: map(address, task_info)
+            all_tasks: map(address, task_info),
+            calls : int
            }
         entrypoint init() =
           { 
-            all_tasks = {}
+            all_tasks = {},
+            calls = 0
              }
         stateful entrypoint init_user() : int = 
+          put(state{calls  = (state.calls + 1) })
           if( !Map.member(Call.caller, state.all_tasks) )
             let task_i = { data = {} , length = 0 }
             put(state{all_tasks[Call.caller] = task_i })
+            
             0
           else
             1
@@ -64,9 +68,10 @@
           state.all_tasks
         stateful entrypoint deleteTask(index : int) =
           put(state{ all_tasks[Call.caller].data @ b = Map.delete(index, b) })
-        
+        stateful entrypoint getCalls() : int =
+          state.calls
         `;
-    const contractAddress = 'ct_2XLA8u56pE9WGUgeiq94P1c9oFXi9cRU6TmLvNTDKT9oDU3ByZ';
+    const contractAddress = 'ct_2RXK9jxq8JvTFL2QvM4nitmanytqRdCtQFBjpBnWsc3sP8GNsG';
   </script>
   <body>
   	<div class="col-8 col-offset-4 panel">
