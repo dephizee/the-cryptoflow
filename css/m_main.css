@@ -16,6 +16,7 @@
       }
       body{
           overflow-y: scroll;
+          scroll-behavior: smooth;
       }
       .header{
         text-align: center;
